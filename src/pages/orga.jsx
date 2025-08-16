@@ -3,16 +3,9 @@ import { useState, useRef, useEffect } from "react";
 
 function Organisation() {
   const groups = {
-    Persönliches: [
-      "Vorname",
-      "Nachname",
-      "Wohnort",
-      "Telefonnummer",
-      "Instagram",
-      "Geburtstag",
-    ],
+    Persönliches: ["Vorname", "Nachname", "Wohnort", "Telefonnummer", "Instagram", "Geburtstag"],
     Treffpunkt: ["Mi früh", "Mi abend"],
-    Mitbringen: ["Mitbringen1", "Mitbringen2"],
+    Mitbringen: ["Pavillon", "5l Benzin"],
   };
 
   const [activeGroup, setActiveGroup] = useState("Persönliches");
@@ -21,29 +14,22 @@ function Organisation() {
     cols.map((col) => ({ label: col, group }))
   );
 
-  // Headers aus localStorage oder initial
   const [headers, setHeaders] = useState(() => {
     const saved = localStorage.getItem("orgaHeaders");
     return saved ? JSON.parse(saved) : initialHeaders;
   });
 
-  // TableData aus localStorage oder initial
   const [tableData, setTableData] = useState(() => {
     const saved = localStorage.getItem("orgaTableData");
-    return saved
-      ? JSON.parse(saved)
-      : [Array(initialHeaders.length).fill("")];
+    return saved ? JSON.parse(saved) : [Array(initialHeaders.length).fill("")];
   });
 
-  // Ref auf die Tabelle, um scrollen zu können
   const tableRef = useRef(null);
 
-  // Speicher TableData automatisch
   useEffect(() => {
     localStorage.setItem("orgaTableData", JSON.stringify(tableData));
   }, [tableData]);
 
-  // Speicher Headers automatisch
   useEffect(() => {
     localStorage.setItem("orgaHeaders", JSON.stringify(headers));
   }, [headers]);
@@ -58,15 +44,19 @@ function Organisation() {
     setTableData([...tableData, Array(headers.length).fill("")]);
   };
 
+  const deleteRow = () => {
+    if (tableData.length === 0) return;
+    if (window.confirm("Letzte Zeile wirklich löschen?")) {
+      setTableData(tableData.slice(0, -1));
+    }
+  };
+
   const addColumn = (colIndex) => {
     const label = prompt("Name der neuen Spalte:");
     if (!label) return;
 
     const newHeaders = [...headers];
-    newHeaders.splice(colIndex + 1, 0, {
-      label,
-      group: headers[colIndex].group,
-    });
+    newHeaders.splice(colIndex + 1, 0, { label, group: headers[colIndex].group });
     setHeaders(newHeaders);
 
     const newData = tableData.map((row) => {
@@ -78,71 +68,47 @@ function Organisation() {
   };
 
   const deleteColumn = (colIndex) => {
-    const confirmDelete = window.confirm(
-      `Spalte "${headers[colIndex].label}" wirklich löschen?`
-    );
-    if (!confirmDelete) return;
-
-    const newHeaders = headers.filter((_, i) => i !== colIndex);
-    setHeaders(newHeaders);
-
-    const newData = tableData.map((row) =>
-      row.filter((_, i) => i !== colIndex)
-    );
-    setTableData(newData);
+    if (!window.confirm(`Spalte "${headers[colIndex].label}" wirklich löschen?`)) return;
+    setHeaders(headers.filter((_, i) => i !== colIndex));
+    setTableData(tableData.map((row) => row.filter((_, i) => i !== colIndex)));
   };
 
   const scrollToGroup = (group) => {
     const firstIndex = headers.findIndex((h) => h.group === group);
     if (firstIndex !== -1 && tableRef.current) {
       const th = tableRef.current.querySelectorAll("th")[firstIndex];
-      if (th) th.scrollIntoView({ behavior: "smooth", inline: "start" });
+      if (th) {
+        // horizontalen Scroll des Containers setzen
+        tableRef.current.parentElement.scrollLeft = th.offsetLeft;
+      }
     }
     setActiveGroup(group);
   };
+  
 
   return (
     <div>
       <h1>Organisation</h1>
 
-      {/* Buttons für Überthemen */}
-      <div style={{ marginBottom: "1rem" }}>
-        <p>Navigiere zu: </p>
+      <div className="controls">
         {Object.keys(groups).map((group) => (
-          <button
-            key={group}
-            onClick={() => scrollToGroup(group)}
-            style={{ marginRight: "0.5rem" }}
-          >
+          <button key={group} onClick={() => scrollToGroup(group)}>
             {group}
           </button>
         ))}
         <button onClick={addRow}>Neue Zeile</button>
+        <button onClick={deleteRow}>Zeile löschen</button>
       </div>
 
-      <div style={{ overflowX: "auto" }}>
-        <table
-          ref={tableRef}
-          border="1"
-          style={{ borderCollapse: "collapse", width: "100%" }}
-        >
+      <div className="table-container">
+        <table ref={tableRef}>
           <thead>
             <tr>
               {headers.map((h, colIndex) => (
-                <th key={colIndex}>
-                  {h.label}{" "}
-                  <button
-                    onClick={() => addColumn(colIndex)}
-                    style={{ fontSize: "0.6rem" }}
-                  >
-                    +
-                  </button>
-                  <button
-                    onClick={() => deleteColumn(colIndex)}
-                    style={{ fontSize: "0.6rem", marginLeft: "0.2rem" }}
-                  >
-                    -
-                  </button>
+                <th key={colIndex} className={`group-${h.group}`}>
+                  {h.label}
+                  <button onClick={() => addColumn(colIndex)}>+</button>
+                  <button onClick={() => deleteColumn(colIndex)}>-</button>
                 </th>
               ))}
             </tr>
@@ -155,10 +121,7 @@ function Organisation() {
                     <input
                       type="text"
                       value={cell}
-                      onChange={(e) =>
-                        handleCellChange(rowIndex, colIndex, e.target.value)
-                      }
-                      style={{ width: "100%" }}
+                      onChange={(e) => handleCellChange(rowIndex, colIndex, e.target.value)}
                     />
                   </td>
                 ))}
