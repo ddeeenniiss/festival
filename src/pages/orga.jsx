@@ -1,11 +1,18 @@
 import "../styles/orga.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function Organisation() {
   const groups = {
-    Persönliches: ["Vorname", "Nachname", "Wohnort", "Telefonnummer", "Instagram", "Geburtstag"],
+    Persönliches: [
+      "Vorname",
+      "Nachname",
+      "Wohnort",
+      "Telefonnummer",
+      "Instagram",
+      "Geburtstag",
+    ],
     Treffpunkt: ["Mi früh", "Mi abend"],
-    Mitbringen: ["Mitbringen1", "Mitbringen2"]
+    Mitbringen: ["Mitbringen1", "Mitbringen2"],
   };
 
   const [activeGroup, setActiveGroup] = useState("Persönliches");
@@ -14,11 +21,32 @@ function Organisation() {
     cols.map((col) => ({ label: col, group }))
   );
 
-  const [headers, setHeaders] = useState(initialHeaders);
-  const [tableData, setTableData] = useState([Array(initialHeaders.length).fill("")]);
+  // Headers aus localStorage oder initial
+  const [headers, setHeaders] = useState(() => {
+    const saved = localStorage.getItem("orgaHeaders");
+    return saved ? JSON.parse(saved) : initialHeaders;
+  });
+
+  // TableData aus localStorage oder initial
+  const [tableData, setTableData] = useState(() => {
+    const saved = localStorage.getItem("orgaTableData");
+    return saved
+      ? JSON.parse(saved)
+      : [Array(initialHeaders.length).fill("")];
+  });
 
   // Ref auf die Tabelle, um scrollen zu können
   const tableRef = useRef(null);
+
+  // Speicher TableData automatisch
+  useEffect(() => {
+    localStorage.setItem("orgaTableData", JSON.stringify(tableData));
+  }, [tableData]);
+
+  // Speicher Headers automatisch
+  useEffect(() => {
+    localStorage.setItem("orgaHeaders", JSON.stringify(headers));
+  }, [headers]);
 
   const handleCellChange = (rowIndex, colIndex, value) => {
     const newData = [...tableData];
@@ -35,7 +63,10 @@ function Organisation() {
     if (!label) return;
 
     const newHeaders = [...headers];
-    newHeaders.splice(colIndex + 1, 0, { label, group: headers[colIndex].group });
+    newHeaders.splice(colIndex + 1, 0, {
+      label,
+      group: headers[colIndex].group,
+    });
     setHeaders(newHeaders);
 
     const newData = tableData.map((row) => {
@@ -47,13 +78,17 @@ function Organisation() {
   };
 
   const deleteColumn = (colIndex) => {
-    const confirmDelete = window.confirm(`Spalte "${headers[colIndex].label}" wirklich löschen?`);
+    const confirmDelete = window.confirm(
+      `Spalte "${headers[colIndex].label}" wirklich löschen?`
+    );
     if (!confirmDelete) return;
 
     const newHeaders = headers.filter((_, i) => i !== colIndex);
     setHeaders(newHeaders);
 
-    const newData = tableData.map((row) => row.filter((_, i) => i !== colIndex));
+    const newData = tableData.map((row) =>
+      row.filter((_, i) => i !== colIndex)
+    );
     setTableData(newData);
   };
 
@@ -68,12 +103,17 @@ function Organisation() {
 
   return (
     <div>
-      <h1>Orga-Seite</h1>
+      <h1>Organisation</h1>
 
       {/* Buttons für Überthemen */}
       <div style={{ marginBottom: "1rem" }}>
+        <p>Navigiere zu: </p>
         {Object.keys(groups).map((group) => (
-          <button key={group} onClick={() => scrollToGroup(group)} style={{ marginRight: "0.5rem" }}>
+          <button
+            key={group}
+            onClick={() => scrollToGroup(group)}
+            style={{ marginRight: "0.5rem" }}
+          >
             {group}
           </button>
         ))}
@@ -81,16 +121,26 @@ function Organisation() {
       </div>
 
       <div style={{ overflowX: "auto" }}>
-        <table ref={tableRef} border="1" style={{ borderCollapse: "collapse", width: "100%" }}>
+        <table
+          ref={tableRef}
+          border="1"
+          style={{ borderCollapse: "collapse", width: "100%" }}
+        >
           <thead>
             <tr>
               {headers.map((h, colIndex) => (
                 <th key={colIndex}>
                   {h.label}{" "}
-                  <button onClick={() => addColumn(colIndex)} style={{ fontSize: "0.6rem" }}>
+                  <button
+                    onClick={() => addColumn(colIndex)}
+                    style={{ fontSize: "0.6rem" }}
+                  >
                     +
                   </button>
-                  <button onClick={() => deleteColumn(colIndex)} style={{ fontSize: "0.6rem", marginLeft: "0.2rem" }}>
+                  <button
+                    onClick={() => deleteColumn(colIndex)}
+                    style={{ fontSize: "0.6rem", marginLeft: "0.2rem" }}
+                  >
                     -
                   </button>
                 </th>
@@ -105,7 +155,9 @@ function Organisation() {
                     <input
                       type="text"
                       value={cell}
-                      onChange={(e) => handleCellChange(rowIndex, colIndex, e.target.value)}
+                      onChange={(e) =>
+                        handleCellChange(rowIndex, colIndex, e.target.value)
+                      }
                       style={{ width: "100%" }}
                     />
                   </td>
