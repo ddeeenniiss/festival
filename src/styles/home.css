@@ -1,0 +1,53 @@
+html, body, #root {
+    height: 100%; /* oder 100vh */
+    margin: 0;
+  }
+
+  
+  #currentLocation {
+    position: absolute;
+    top: 5rem;
+    left: 5rem;
+  }
+  
+  #menu {
+    position: absolute;
+    top: 5rem;
+    right: 5rem;
+  }
+
+  #addInvite {
+    position: absolute;
+    top: 5rem;
+    left: 40rem;
+    height: 5rem;
+    width: 5rem;
+  }
+
+  .sidebar {
+    position: fixed;       /* fix am Viewport */
+    top: 0;                /* von oben anfangen */
+    right: 0;              /* an den rechten Rand */
+    height: 100%;          /* volle Höhe */
+    width: 250px;          /* Breite */
+    background-color: #fff; /* Hintergrund, damit er sich abhebt */
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2); /* leichter Schatten */
+    padding: 2rem 1rem;
+    z-index: 1000;         /* über anderen Elementen */
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin: 1rem 0;
+  }
+  
+  .sidebar a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+  }
+  
