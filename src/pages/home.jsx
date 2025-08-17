@@ -209,22 +209,22 @@ function Home() {
         <div className="sidebar">
           <ul>
             <li>
-              <Link smooth to="/orga#persönliches">
+              <Link smooth to="/orga">
                 Persönliches
               </Link>
             </li>
             <li>
-              <Link smooth to="/orga#treffpunkt">
+              <Link smooth to="/orga">
                 Treffpunkt
               </Link>
             </li>
             <li>
-              <Link smooth to="/orga#mitbringen">
+              <Link smooth to="/orga">
                 Wer bringt was mit?
               </Link>
             </li>
             <li>
-              <Link smooth to="/orga#reservierungen">
+              <Link smooth to="/orga">
                 Wie viel Platz muss reserviert werden?
               </Link>
             </li>
