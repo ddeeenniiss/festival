@@ -6,6 +6,7 @@ function Organisation() {
     Persönliches: ["Vorname", "Nachname", "Wohnort", "Telefonnummer", "Instagram", "Geburtstag"],
     Treffpunkt: ["Mi früh", "Mi abend"],
     Mitbringen: ["Pavillon", "5l Benzin"],
+    Reservierungen: ["Autostellplatz", "Zeltstellplatz"],
   };
 
   const [activeGroup, setActiveGroup] = useState("Persönliches");
