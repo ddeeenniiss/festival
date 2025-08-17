@@ -74,7 +74,6 @@ html, body {
   
   th {
     top: 0;
-    background-color: #f0f0f0;
     color: black;
   }
   
@@ -96,17 +95,22 @@ html, body {
     border-radius: 3px;
   }
   
-  /* Farbige Gruppen */
-  .group-Persönliches {
-    background-color: #ffddcc;
+  .group-pers {
+    background-color: #f5925d;
   }
   
-  .group-Treffpunkt {
-    background-color: #ccffcc;
+  .group-treff {
+    background-color: #98f698;
   }
   
-  .group-Mitbringen {
+  .group-mit {
     background-color: #4171b8;
+    color: white;
+  }
+  
+  .group-res {
+    background-color: #964459;
+    color: white;
   }
   
 

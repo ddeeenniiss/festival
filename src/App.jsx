@@ -1,5 +1,6 @@
 import './App.css'
 import Home from './pages/home'
+import MapPage from './pages/mapPage';
 import { Outlet } from "react-router-dom";
 
 function App() {
