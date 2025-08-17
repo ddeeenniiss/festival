@@ -1,136 +1,186 @@
 /* Grundlayout */
-html, body {
-    margin: 0;
-    padding: 0;
-    background-color: rgb(57, 112, 167);
-  }
-  
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(
+    135deg,
+    rgb(57, 112, 167) 0%,
+    rgb(99, 153, 209) 50%,
+    rgb(180, 210, 255) 100%
+  );
+}
+
+h1 {
+  color: white;
+  position: sticky;
+  margin: 1rem;
+}
+
+/* Container für Buttons */
+.controls {
+  margin: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  position: sticky;
+}
+
+.controls button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.controls button:hover {
+  opacity: 0.8;
+}
+
+.table-container {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 70vh; /* damit vertikal in diesem Container gescrollt wird */
+  padding: 1rem;
+  background: rgb(57, 112, 167);
+}
+
+table {
+  /* statt collapse/hidden -> separate/spacing */
+  border-collapse: separate;
+  border-spacing: 0;
+
+  /* für stabile Spaltenbreiten */
+  table-layout: fixed;
+
+  width: 500%;
+  min-width: 800px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  min-width: 150px;
+}
+
+th {
+  top: 0;
+  color: black;
+}
+
+td input {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+/* Buttons innerhalb von Tabellenzellen */
+th button {
+  font-size: 0.6rem;
+  margin-left: 0.2rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.group-pers {
+  background-color: #f5925d;
+}
+
+.group-treff {
+  background-color: #98f698;
+}
+
+.group-mit {
+  background-color: #4171b8;
+  color: white;
+}
+
+.group-res {
+  background-color: #964459;
+  color: white;
+}
+
+/* Header sticky oben */
+thead th {
+  top: 0;
+  background: #f0f0f0;
+  z-index: 40; /* über Zellen & erster Spalte */
+}
+
+/* Erste Spalte sticky links */
+th:first-child,
+td:first-child {
+  position: sticky;
+  left: 0;
+  background: #fff; /* überdeckt darunter */
+  z-index: 30; /* unter Header, über normalen Zellen */
+  border-right: 1px solid #ddd;
+}
+
+/* Smartphones bis 600px */
+@media (max-width: 600px) {
   h1 {
-    color: white;
-    position: sticky;
-    margin: 1rem;
-
+    font-size: 5rem;
+    margin: 0.5rem;
   }
 
-  
-  /* Container für Buttons */
   .controls {
-    margin: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
-    position: sticky;
+    flex-direction: column; /* Buttons untereinander */
+    align-items: stretch;
   }
-  
-  .controls button {
-    padding: 0.4rem 0.8rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-  }
-  
-  .controls button:hover {
-    opacity: 0.8;
-  }
-  
-  .table-container {
-    overflow-x: auto;
-    overflow-y: auto;
-    max-height: 70vh;        /* damit vertikal in diesem Container gescrollt wird */
-    padding: 1rem;
-    background: rgb(57, 112, 167);
-  }
-  
-  
-  
-  table {
-    /* statt collapse/hidden -> separate/spacing */
-    border-collapse: separate;
-    border-spacing: 0;
-  
-    /* für stabile Spaltenbreiten */
-    table-layout: fixed;
-  
-    width: 500%;
-    min-width: 800px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  
 
-  
-  
-  th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    min-width: 150px; 
+  .controls button {
+    display: flex;
+    flex-direction: column; /* Buttons untereinander */
+    align-items: center; /* horizontal zentrieren */
+    gap: 0.5rem;
+    font-size: 2rem;
   }
-  
-  
-  th {
-    top: 0;
-    color: black;
+
+  .table-container {
+    padding: 0.5rem;
+    max-height: 200vh; /* z. B. fast ganzer Bildschirm */
+  overflow: auto;
+  }
+
+  table {
+    width: 500%; /* Tabelle nicht 500% */
+    font-size: 0.7rem; /* kleinere Schrift */
+    max-height: 100rem;
+  }
+
+  th,
+  td {
+    height: 7rem; 
+    padding: 1rem; /* Innenabstand */
+    width: 1.5rem;
+    font-size: 2rem;
+  }
+
+  tr{
+      width: 2rem;
   }
   
   
   td input {
-    width: 100%;
-    padding: 4px 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    box-sizing: border-box;
+    font-size: 2rem;
+    padding: 2px 4px;
+    height: 10vh;
+    border-radius: 8px;
+    background-color: #ccc;
+    color: black;
+    
   }
-  
-  /* Buttons innerhalb von Tabellenzellen */
-  th button {
-    font-size: 0.6rem;
-    margin-left: 0.2rem;
-    padding: 2px 6px;
-    border-radius: 3px;
-  }
-  
-  .group-pers {
-    background-color: #f5925d;
-  }
-  
-  .group-treff {
-    background-color: #98f698;
-  }
-  
-  .group-mit {
-    background-color: #4171b8;
-    color: white;
-  }
-  
-  .group-res {
-    background-color: #964459;
-    color: white;
-  }
-  
 
-  
-/* Header sticky oben */
-thead th {
-    top: 0;
-    background: #f0f0f0;
-    z-index: 40;            /* über Zellen & erster Spalte */
-  }
-  
-  /* Erste Spalte sticky links */
-  th:first-child,
-  td:first-child {
-    position: sticky;
-    left: 0;
-    background: #fff;       /* überdeckt darunter */
-    z-index: 30;            /* unter Header, über normalen Zellen */
-    border-right: 1px solid #ddd;
-  }
-  
- 
-  
+}
